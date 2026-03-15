@@ -1,220 +1,10 @@
-# Overview of CAN (Controller Area Network)
-
-Controller Area Network (CAN) is a communication protocol designed for ECUs (Electronic Control Units) in vehicles to communicate with each other without a central computer.
-
-A CAN network consists of:
-- CAN Controller (in MCU)
-- CAN Transceiver
-- CAN Bus (2 physical wires)
-
-Two main wires:
-- CAN_H
-- CAN_L
-
-## CAN Message (CAN Frame)
-CAN transmits data using frames.
-
-A basic CAN frame includes:
-
-| Field | Meaning |
-|-------|--------|
-| ID    | Message identifier |
-| DLC   | Data Length Code   |
-| Data  | Data bytes         |
-| CRC   | Error checking     |
-
-### CAN ID
-This is the message identifier.
-
-Example:
-| CAN ID | Meaning         |
-|--------|----------------|
-| 0x100  | Vehicle Speed  |
-| 0x200  | Engine RPM     |
-| 0x300  | Gear position  |
-
-### Data field
-- Standard CAN has 8 bytes, CAN FD can have up to 64 bytes per frame.
-- These bytes need a database file to decode and understand which signals they represent.
-
-## DBC file
-
-DBC file is a database describing CAN messages. This file helps you decode CAN frames according to the vehicle's specification.
-
-Example:
-- Raw frame:
-    - ID: 0x100
-    - DATA: 0A 3C
-- DBC decode:
-    - VehicleSpeed = 60 km/h
-
----
-
-## Question
-Is the DBC file provided by the customer (OEM, vehicle manufacturer)? If not, who is responsible for providing and updating the DBC file?
-
-## Try decoding a CAN frame using DBC
-You can use cantools to load the DBC file and try decoding a simulated frame:
-
-```python
-import cantools
-
-# Load DBC file
-db = cantools.database.load_file('vehicle.dbc')
-
-# Simulate a CAN frame (ID: 256, data: 0x0A 0x00 0x64 0x00 0x01 0x03 0x00 0x00)
-frame_id = 256
-data = bytes([0x0A, 0x00, 0x64, 0x00, 0x01, 0x03, 0x00, 0x00])
-
-# Find message by ID
-msg = db.get_message_by_frame_id(frame_id)
-
-# Decode
-decoded = msg.decode(data)
-print(decoded)  # {'VehicleSpeed': ..., 'EngineRPM': ..., ...}
-```
-
-You can change the data to try decoding other signals based on the DBC structure.
-
----
-
-# Steps to acquire CAN frames
-
-According to technical_proposal.md, the sequence is:
-
-```
-┌─────────────┐    SocketCAN    ┌─────────────┐    Frames    ┌─────────────┐
-│  Vehicle    │ ──────────────► │  CAN HW     │ ───────────► │  python-can │
-│  CAN Bus    │    Interface    │  Interface  │   (async)    │  Adapter    │
-└─────────────┘                 └─────────────┘              └──────┬──────┘
-                                                                    │
-                                                                    ▼
-                                                             ┌─────────────┐
-                                                             │  cantools   │
-                                                             │  DBC Decode │
-                                                             └──────┬──────┘
-                                                                    │
-                                                                    ▼
-                                                             ┌─────────────┐
-                                                             │  Signal     │
-                                                             │  Store      │
-                                                             └─────────────┘
-```
-
-## Detailed explanation of each step
-
-### 1. Vehicle CAN Bus
-The vehicle has a CAN bus system, transmitting frames between ECUs (e.g., speed, RPM, light status, etc.).
-
-### 2. CAN HW Interface
-You need a hardware device (CAN HW Interface) to connect CarPC to the vehicle's CAN bus.
-- Examples: USB-CAN, onboard CAN, PCIe CAN card, etc.
-- This device is plugged into CarPC.
-
-### 3. SocketCAN Interface
-On Linux, install the SocketCAN driver so the OS recognizes the CAN HW Interface as a network interface (can0, vcan0, ...).
-- SocketCAN allows Python (and other software) to communicate with CAN HW Interface via standard API.
-
-### 4. python-can Adapter
-In CarPC code, use the python-can library to create a Bus object, connecting to the interface (can0, vcan0, ...).
-- python-can receives CAN frames from SocketCAN, processes them asynchronously (non-blocking).
-
-### 5. cantools + DBC Decode
-When a CAN frame is received, use cantools and the DBC file to decode the frame into real signals (speed, rpm, ...).
-- DBC helps identify which frame contains which signals and how to decode them into physical values.
-
-### 6. Signal Store
-After decoding, store the signals in Signal Store.
-- Signal Store keeps current values, history, and publishes events to other components (WebSocket, trigger engine, ...).
-
-> Note: You need to continuously read data from the CAN bus, polling to receive data from CAN bus.
-
----
-
-## Only send when changed (on_change mechanism)
-According to technical_proposal.md, there is Signal Store and Trigger Engine:
-│  ┌───────────────────────────────────────────────────────────────────────────┐  │
-│  │                    CORE LAYER (Vehicle Data Processing)                    │  │
-│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐       │  │
-│  │  │ Message     │  │ Signal      │  │ Trigger     │  │ State       │       │  │
-│  │  │ Decoder     │  │ Store       │  │ Engine      │  │ Manager     │       │  │
-│  │  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘       │  │
-│  │         │                │                │                │              │  │
-│  │         └────────────────┴────────────────┴────────────────┘              │  │
-│  │                                   │                                        │  │
-│  │                          Internal Event Bus                                │  │
-│  └───────────────────────────────────┼───────────────────────────────────────┘  │
-
-- Signal Store keeps current values and history.
-- Trigger Engine checks conditions (e.g., on_change, threshold, periodic) and only sends events when needed.
-- Helps reduce network load, clients only receive when necessary.
-
----
-
-## Sample code for processing flow
-
-```python
-import asyncio
-import can
-import cantools
-
-class CANAdapter:
-    def __init__(self, channel, dbc_path, bustype="socketcan"):
-        self.channel = channel
-        self.bustype = bustype
-        self.db = cantools.database.load_file(dbc_path)
-        self._bus = None
-        self._running = False
-        self._callbacks = []
-
-    async def start(self):
-        self._bus = can.Bus(channel=self.channel, bustype=self.bustype, fd=True)
-        self._running = True
-        asyncio.create_task(self._receive_loop())
-
-    async def _receive_loop(self):
-        reader = can.AsyncBufferedReader()
-        notifier = can.Notifier(self._bus, [reader], loop=asyncio.get_event_loop())
-        try:
-            while self._running:
-                msg = await reader.get_message()
-                await self._process_message(msg)
-        finally:
-            notifier.stop()
-
-    async def _process_message(self, msg):
-        try:
-            db_msg = self.db.get_message_by_frame_id(msg.arbitration_id)
-            decoded = db_msg.decode(msg.data)
-            for callback in self._callbacks:
-                await callback(db_msg.name, decoded)
-        except KeyError:
-            pass
-
-    def subscribe(self, callback):
-        self._callbacks.append(callback)
-
-    async def stop(self):
-        self._running = False
-        if self._bus:
-            self._bus.shutdown()
-```
-
----
-
-## References
-- [python-can docs](https://python-can.readthedocs.io/en/stable/)
-- [python-can installation](https://python-can.readthedocs.io/en/stable/installation.html)
-- [python-can configuration](https://python-can.readthedocs.io/en/stable/configuration.html)
-- [python-can API](https://python-can.readthedocs.io/en/stable/api.html)
-
 # Tổng quan về CAN (Controller Area Network)
 
 Controller Area Network (CAN) là một communication protocol được thiết kế để các ECU (Electronic Control Unit) trong xe giao tiếp với nhau mà không cần máy tính trung tâm.
 
 Một CAN network gồm:
 - CAN Controller (trong MCU)
-- CAN Transceiver
+- CAN Transceiver (CAN Transceiver là một chip phần cứng dùng để chuyển đổi tín hiệu logic từ CAN controller thành tín hiệu điện trên bus CAN)
 - CAN Bus (2 dây vật lý)
 
 Hai dây chính:
@@ -228,12 +18,30 @@ Một CAN frame cơ bản gồm:
 
 | Field | Ý nghĩa |
 |-------|--------|
-| ID    | Message identifier |
+| ID    | Message ID |
 | DLC   | Data Length Code   |
 | Data  | Data bytes         |
 | CRC   | Error checking     |
 
-### CAN ID
+Một CAN frame đầy đủ gồm:
+
+| Field                 | Ý nghĩa                   | Example                   |   
+|-----------------------|---------------------------|---------------------------|
+| SOF                   | Start of Frame            | 0                         |
+| Arbitration           | CAN ID (Mesage ID)        | 01100100011               |
+| Control               | DLC (Data Length Code)    | 00001000                  |
+| Data                  | Data (Data bytes)         | 11 22 33 44 55 66 77 88   |
+| CRC                   | CRC (Error checking)      | 101010101010101           |
+| ACK                   | Acknowledgement           | 1                         |
+| EOF                   | Start of Frame            |1111111                    |
+
+- Khi develop hoặc debug CAN, developer không làm việc với CAN frame ở mức bit (SOF, CRC, ACK…). Phần đó do CAN controller xử lý.
+- Trong thực tế bạn chỉ thấy CAN ID + DLC + DATA (hex) của Controller Area Network (CAN).
+- E.g. can0  123   [8]  11 22 33 44 55 66 77 88
+- 1 CAN Frame có thể chứa 5–10 signal khác nhau trong cùng 8 byte.
+
+
+### CAN ID (Arbitration)
 Nó là message identifier.
 
 Ví dụ:
@@ -242,14 +50,25 @@ Ví dụ:
 | 0x100  | Vehicle Speed  |
 | 0x200  | Engine RPM     |
 | 0x300  | Gear position  |
+- 
+### DLC (Control)
+- DLC (Data Length Code) là trường trong CAN frame dùng để xác định số byte dữ liệu (data bytes)
 
 ### Data field
 - CAN thông thường thì có 8 bytes, còn CAN FD thì sẽ có 64 bytes data ứng với mỗi frame.
 - Những byte từ frame data này sẽ cần file database để decode để hiểu được các data đó là những giá trị của signal gì.
 
+### CRC
+- Các bit kiểm tra lỗi
+- CRC giúp ECU nhận biết message có bị lỗi trong quá trình truyền hay không.
+
+### ACK
+- Tín hiệu xác nhận message đã được nhận.
+
 ## DBC file
 
-DBC file là database mô tả CAN message. File này giúp bạn giải mã đúng các frame CAN theo chuẩn của xe.
+DBC file (.dbc) là database mô tả CAN message. File này giúp bạn giải mã đúng các frame CAN theo chuẩn của xe.
+- Message ID, Signal name, Start bit, Length, Factor, Offset, Unit.
 
 Ví dụ:
 - Raw frame:

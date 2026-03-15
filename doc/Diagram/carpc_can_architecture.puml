@@ -1,0 +1,40 @@
+@startuml CarPC_CAN_Architecture
+
+title CarPC CAN Logger - Component Architecture
+
+node "Car System" as CAR_SYSTEM {
+  actor "Driver / Vehicle" as DRIVER
+  node "Car\n(Electrical System)" as CAR
+  component "ECU(s)" as ECU
+  queue "CAN Bus\n(CAN_H / CAN_L)" as CAN
+  node "CAN Interface\n(USB-CAN / PCIe / MCP2515)" as IF
+
+  DRIVER --> CAR : Operate vehicle\n(start, drive, etc.)
+  CAR o- ECU
+  ECU --> CAN : Broadcast CAN frames
+  CAN --> IF : Physical CAN_H/CAN_L
+}
+
+node "CarPC\n(Linux)" as CARPC {
+  component "SocketCAN\n(can0)" as OS
+  package "Python App\n(carpc_can)" as APP {
+    component "CANBus\n(carpc_can.can_bus)" as MOD_CANBUS
+    component "Processor\n(carpc_can.processor)" as MOD_PROC
+    component "Storage\n(carpc_can.storage)" as MOD_STORE
+    component "App\n(carpc_can.app)" as MOD_APP
+  }
+  database "JSON Logs\nlogs/can_frames.jsonl" as LOG
+}
+
+IF --> OS : CAN frames\nvia SocketCAN driver
+
+MOD_APP --> MOD_CANBUS : Open & receive\nCAN messages
+MOD_APP --> MOD_PROC : process_message(msg)
+MOD_APP --> MOD_STORE : append(record)
+
+MOD_STORE --> LOG : Write JSON lines
+
+OS <-- MOD_CANBUS : python-can\nSocketCAN API
+
+@enduml
+

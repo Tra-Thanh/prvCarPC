@@ -1,0 +1,32 @@
+@startuml CarPC_CAN_Component
+
+title CarPC - Physical Connections (CAN)
+
+skinparam componentStyle rectangle
+skinparam defaultFontName SansSerif
+
+package "Vehicle" as PKG_CAR #E8F5E9 {
+  [ECU Engine] as ECU_ENG
+  [ECU Body / BCM] as ECU_BCM
+  [Other ECUs] as ECU_OTH
+  [CAN Bus\nCAN_H / CAN_L\n(twisted pair)] as CANBUS
+  ECU_ENG -- CANBUS : wired
+  ECU_BCM -- CANBUS : wired
+  ECU_OTH -- CANBUS : wired
+}
+
+package "Physical links" as PKG_PHY #FFF3E0 {
+  [OBD-II connector\nPin 6 = CAN_H\nPin 14 = CAN_L] as OBD
+  [CAN Interface\nUSB-CAN / PCIe / MCP2515] as CAN_IF
+  CANBUS -- OBD : vehicle harness
+  OBD -- CAN_IF : cable / adapter
+}
+
+package "CarPC (Linux)" as PKG_CARPC #E3F2FD {
+  [CarPC hardware\nUSB host / PCIe / SPI] as CARPC_HW
+  [SocketCAN\ncan0] as SOCKETCAN
+  CAN_IF -- CARPC_HW : USB cable\nor PCIe slot\nor SPI bus
+  CARPC_HW -- SOCKETCAN : kernel driver
+}
+
+@enduml
