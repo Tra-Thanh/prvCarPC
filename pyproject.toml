@@ -1,0 +1,10 @@
+[project]
+name = "carpc"
+version = "0.1.0"
+description = "Linux-first CarPC CAN/ECU toolkit (collect/decode/store/send/sim/test)"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+

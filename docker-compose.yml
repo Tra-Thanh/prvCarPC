@@ -1,0 +1,15 @@
+services:
+  carpc:
+    build: .
+    image: carpc:dev
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - ./data:/data
+    environment:
+      - CARPC_LOG_FORMAT=plain
+    # For real SocketCAN usage you typically need:
+    #   network_mode: host
+    #   privileged: true
+    # and/or device mapping for your CAN adapter.
+    command: ["bash"]
