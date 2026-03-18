@@ -79,19 +79,21 @@ Mở terminal khác (trong container):
 ```bash
 docker compose run --rm carpc bash
 
-python3 -m carpc --help
 python3 -m carpc collect --channel vcan0 --interface virtual --dbc examples/example.dbc --db /data/carpc.db --max-seconds 5
 python3 -m carpc ecu set-speed --channel vcan0 --interface virtual --dbc examples/example.dbc --kph 42
+
 ```
 
 - Dòng `docker compose run ... bash`: mở **terminal container thứ 2** để chạy collector/command song song với simulator.
-- `python3 -m carpc --help`: xem danh sách lệnh và options.
 - `collect`: đọc CAN frames, decode theo DBC, rồi lưu raw + signals vào SQLite.
 - `--max-seconds 5`: chạy trong 5 giây rồi tự dừng (tiện demo).
 - `ecu set-speed`: ví dụ ECU command mức cao (encode DBC message `VehicleCommand` với signal `SetSpeedKph`).
 - `--kph 42`: set giá trị muốn gửi (km/h).
 
-## Chạy trên host Linux (không Docker)
+python3 -m carpc --help
+- `python3 -m carpc --help`: xem danh sách lệnh và options.
+
+## Chạy trên host Linux (không phải chạy trên Docker)
 
 ```bash
 python3 -m venv .venv
