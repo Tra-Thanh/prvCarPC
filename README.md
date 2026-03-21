@@ -63,24 +63,24 @@ pip install -r requirements.txt
 
 ```bash
 python3 -m carpc db init --db /data/carpc.db
-python3 -m carpc sim run --channel vcan0 --interface virtual --dbc examples/example.dbc
+python3 -m carpc sim run --channel vcan0 --interface virtual --dbc dbcResource/vehicle.dbc
 ```
 
 - `python3 -m carpc ...`: chạy CLI của app (module `carpc`).
 - `db init`: tạo schema SQLite.
 - `--db /data/carpc.db`: đường dẫn DB (được mount ra host qua volume `./data:/data`).
-- `sim run`: chạy mô phỏng “xe” phát CAN frames.
+- `sim run`: chạy mô phỏng "xe" phát CAN frames.
 - `--interface virtual`: dùng CAN bus kiểu virtual (không cần can0 thật).
 - `--channel vcan0`: tên kênh logic cho virtual bus (hai terminal phải trùng nhau).
-- `--dbc examples/example.dbc`: file DBC dùng để encode/decode signals.
+- `--dbc dbcResource/vehicle.dbc`: file DBC dùng để encode/decode signals.
 
 Mở terminal khác (trong container):
 
 ```bash
 docker compose run --rm carpc bash
 
-python3 -m carpc collect --channel vcan0 --interface virtual --dbc examples/example.dbc --db /data/carpc.db --max-seconds 5
-python3 -m carpc ecu set-speed --channel vcan0 --interface virtual --dbc examples/example.dbc --kph 42
+python3 -m carpc collect --channel vcan0 --interface virtual --dbc dbcResource/vehicle.dbc --db /data/carpc.db --max-seconds 5
+python3 -m carpc ecu set-speed --channel vcan0 --interface virtual --dbc dbcResource/vehicle.dbc --kph 42
 
 ```
 
@@ -137,7 +137,40 @@ python3 -m carpc ecu set-speed --interface socketcan --channel can0 --dbc /dbc/v
 
 ## ECU Control & Command
 
-- `carpc ecu set-speed`: ví dụ command mức cao (encode theo DBC → gửi CAN frame).
+### set-speed command (đã mã hóa theo DBC)
+
+```bash
+python3 -m carpc ecu set-speed --channel vcan0 --interface virtual --dbc dbcResource/vehicle.dbc --kph 60
+```
+
+- Gửi thông điệp `VehicleCommand` với signal `SetSpeedKph = 60` km/h.
+- Dữ liệu được **mã hóa theo DBC** → tự động tính frame ID + payload.
+- Để SocketCAN: `--interface socketcan --channel can0`
+
+### send-raw command (dữ liệu thô)
+
+```bash
+python3 -m carpc send-raw --channel vcan0 --interface virtual --id 0x100 --data "0x11 0x22 0x33 0x44"
+```
+
+**Tham số:**
+- `--id 0x100`: CAN arbitration ID (thập lục phân)
+- `--data "..."`: dữ liệu hex (cách bằng space hoặc không)
+
+**Ví dụ:**
+```bash
+# Gửi VehicleStatus (ID 0x100) với dữ liệu thô
+python3 -m carpc send-raw --id 0x100 --data "11 22 33 44 55 66 77 88"
+
+# Hoặc viết liền
+python3 -m carpc send-raw --id 0x200 --data "1122334455667788"
+```
+
+- Không cần DBC, gửi "nguyên trạng" (debug/test).
+- Để SocketCAN: `--interface socketcan --channel can0`
+
+---
+
 - Với dự án thật, bạn sẽ thay `VehicleCommand/SetSpeedKph` bằng các message/signal command theo DBC của xe (ví dụ: torque request, mode request, ...).
 - Nếu cần control theo UDS/DoIP (diagnostic), bạn có thể mở rộng module `carpc/ecu.py` để gửi request/response theo protocol; hiện bản scaffold tập trung CAN frame level + DBC.
 
@@ -151,7 +184,7 @@ python3 -m carpc ecu set-speed --interface socketcan --channel can0 --dbc /dbc/v
 ### Run simulation (virtual bus)
 
 ```bash
-python3 -m carpc sim run --channel vcan0 --interface virtual --dbc examples/example.dbc
+python3 -m carpc sim run --channel vcan0 --interface virtual --dbc dbcResource/vehicle.dbc
 ```
 
 - Chạy simulator để có dữ liệu CAN “giả” phát liên tục.
@@ -159,7 +192,7 @@ python3 -m carpc sim run --channel vcan0 --interface virtual --dbc examples/exam
 ### Run collector (decode + store to SQLite)
 
 ```bash
-python3 -m carpc collect --channel vcan0 --interface virtual --dbc examples/example.dbc --db /data/carpc.db --max-seconds 10 --log-level INFO
+python3 -m carpc collect --channel vcan0 --interface virtual --dbc dbcResource/vehicle.dbc --db /data/carpc.db --max-seconds 10 --log-level INFO
 ```
 
 - `--log-level INFO`: mức log (đổi `DEBUG` để xem chi tiết hơn).

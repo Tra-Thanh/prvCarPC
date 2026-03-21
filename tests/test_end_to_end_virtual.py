@@ -10,7 +10,7 @@ from carpc.storage_sqlite import SQLiteStorage
 
 
 def test_virtual_collect_and_store(tmp_path):
-    dbc = load_dbc("examples/example.dbc")
+    dbc = load_dbc("dbcResource/vehicle.dbc")
     db_path = str(tmp_path / "carpc.db")
     storage = SQLiteStorage(db_path)
     storage.init_schema()
@@ -33,9 +33,9 @@ def test_virtual_collect_and_store(tmp_path):
 
 
 def test_ecu_command_encodes():
-    dbc = load_dbc("examples/example.dbc")
+    dbc = load_dbc("dbcResource/vehicle.dbc")
     frame_id, payload = build_message_data(dbc=dbc, message_name="VehicleCommand", signals={"SetSpeedKph": 42})
-    assert frame_id == 257
+    assert frame_id == 512
     decoded = dbc.decode_message(frame_id, payload)
     assert abs(float(decoded["SetSpeedKph"]) - 42) < 0.1
 
