@@ -1,0 +1,93 @@
+19:15:45 [INFO] carpc.demo: [Processor] DBC loaded: 6 messages -> ['VehicleStatus', 'SeatControl', 'SafetyStatus', 'DMSStatus', 'OMSStatus', 'ClimateControl']
+19:15:45 [INFO] carpc.demo: [Storage] JSON log: E:\Project\carPC_March2026\localGit\prvCarPC\democode\can_frames.jsonl
+19:15:45 [INFO] carpc.demo: =================================================================
+19:15:45 [INFO] carpc.demo:   CarPC CAN Demo - Windows (python-can virtual bus)
+19:15:45 [INFO] carpc.demo:   DBC : E:\Project\carPC_March2026\localGit\prvCarPC\democode\dbc\vehicle.dbc
+19:15:45 [INFO] carpc.demo:   Log : E:\Project\carPC_March2026\localGit\prvCarPC\democode\can_frames.jsonl
+19:15:45 [INFO] carpc.demo: =================================================================
+19:15:45 [INFO] carpc.demo: [CANBus] Connected to virtual bus: channel='carpc_demo'
+19:15:45 [INFO] carpc.demo: [CarPC] Start receiving frames from virtual bus...
+19:15:45 [INFO] carpc.demo: [ECU] Start sending frames...
+19:15:45 [INFO] carpc.demo: [CarPC] #001 VehicleStatus (0x100): VehicleSpeed=95.9, EngineRPM=3270.0, BatteryVoltage=12.3, IgnitionStatus=On, GearPosition=Reverse
+19:15:45 [INFO] carpc.demo: [CarPC] #002 ClimateControl (0x600): ACStatus=0.0, FanSpeed=6.0, TargetTempDriver=27.5, TargetTempPassenger=27.5, AmbientTemp=18.0
+19:15:45 [INFO] carpc.demo: [CarPC] #003 DMSStatus (0x400): DriverPresent=1.0, DriverAttention=Distracted, DrowsinessLevel=4.0, GazeDirection=97.0, HeadPoseYaw=-3.7, HeadPosePitch=-14.0, EyeOpenness=82.5
+19:15:45 [INFO] carpc.demo: [CarPC] #004 VehicleStatus (0x100): VehicleSpeed=116.9, EngineRPM=1132.0, BatteryVoltage=11.8, IgnitionStatus=On, GearPosition=Sport
+19:15:45 [INFO] carpc.demo: [CarPC] #005 ClimateControl (0x600): ACStatus=1.0, FanSpeed=4.0, TargetTempDriver=25.0, TargetTempPassenger=27.0, AmbientTemp=4.0
+19:15:45 [INFO] carpc.demo: [CarPC] #006 DMSStatus (0x400): DriverPresent=1.0, DriverAttention=Distracted, DrowsinessLevel=3.0, GazeDirection=151.0, HeadPoseYaw=25.900000000000002, HeadPosePitch=12.5, EyeOpenness=96.5
+19:15:46 [INFO] carpc.demo: [CarPC] #007 VehicleStatus (0x100): VehicleSpeed=37.800000000000004, EngineRPM=3450.0, BatteryVoltage=14.0, IgnitionStatus=On, GearPosition=Reverse
+19:15:46 [INFO] carpc.demo: [CarPC] #008 ClimateControl (0x600): ACStatus=0.0, FanSpeed=2.0, TargetTempDriver=22.5, TargetTempPassenger=25.0, AmbientTemp=14.5
+19:15:46 [INFO] carpc.demo: [CarPC] #009 DMSStatus (0x400): DriverPresent=1.0, DriverAttention=Distracted, DrowsinessLevel=0.0, GazeDirection=32.0, HeadPoseYaw=3.2, HeadPosePitch=10.4, EyeOpenness=97.5
+19:15:46 [INFO] carpc.demo: [CarPC] #010 VehicleStatus (0x100): VehicleSpeed=113.7, EngineRPM=3681.0, BatteryVoltage=13.200000000000001, IgnitionStatus=On, GearPosition=Drive
+19:15:46 [INFO] carpc.demo: [CarPC] #011 ClimateControl (0x600): ACStatus=1.0, FanSpeed=6.0, TargetTempDriver=23.5, TargetTempPassenger=20.5, AmbientTemp=7.5
+19:15:46 [INFO] carpc.demo: [CarPC] #012 DMSStatus (0x400): DriverPresent=1.0, DriverAttention=Distracted, DrowsinessLevel=3.0, GazeDirection=61.0, HeadPoseYaw=0.1, HeadPosePitch=-13.4, EyeOpenness=67.0
+19:15:47 [INFO] carpc.demo: [CarPC] #013 VehicleStatus (0x100): VehicleSpeed=30.6, EngineRPM=3111.0, BatteryVoltage=11.700000000000001, IgnitionStatus=On, GearPosition=Sport
+19:15:47 [INFO] carpc.demo: [CarPC] #014 ClimateControl (0x600): ACStatus=1.0, FanSpeed=4.0, TargetTempDriver=25.5, TargetTempPassenger=26.5, AmbientTemp=14.0
+19:15:47 [INFO] carpc.demo: [CarPC] #015 DMSStatus (0x400): DriverPresent=1.0, DriverAttention=Drowsy, DrowsinessLevel=1.0, GazeDirection=143.0, HeadPoseYaw=20.5, HeadPosePitch=10.9, EyeOpenness=80.0
+19:15:47 [INFO] carpc.demo: [CarPC] #016 VehicleStatus (0x100): VehicleSpeed=77.7, EngineRPM=2309.0, BatteryVoltage=11.700000000000001, IgnitionStatus=On, GearPosition=Reverse
+19:15:47 [INFO] carpc.demo: [CarPC] #017 ClimateControl (0x600): ACStatus=0.0, FanSpeed=6.0, TargetTempDriver=23.0, TargetTempPassenger=27.0, AmbientTemp=-5.0
+19:15:47 [INFO] carpc.demo: [CarPC] #018 DMSStatus (0x400): DriverPresent=1.0, DriverAttention=Distracted, DrowsinessLevel=1.0, GazeDirection=115.0, HeadPoseYaw=21.8, HeadPosePitch=6.4, EyeOpenness=94.5
+19:15:48 [INFO] carpc.demo: [CarPC] #019 VehicleStatus (0x100): VehicleSpeed=93.0, EngineRPM=3019.0, BatteryVoltage=13.200000000000001, IgnitionStatus=On, GearPosition=Sport
+19:15:48 [INFO] carpc.demo: [CarPC] #020 ClimateControl (0x600): ACStatus=0.0, FanSpeed=4.0, TargetTempDriver=25.5, TargetTempPassenger=23.5, AmbientTemp=18.0
+19:15:48 [INFO] carpc.demo: [CarPC] #021 DMSStatus (0x400): DriverPresent=1.0, DriverAttention=Attentive, DrowsinessLevel=4.0, GazeDirection=86.0, HeadPoseYaw=5.2, HeadPosePitch=3.6, EyeOpenness=69.0
+19:15:48 [INFO] carpc.demo: [CarPC] #022 VehicleStatus (0x100): VehicleSpeed=0.9, EngineRPM=1606.0, BatteryVoltage=12.100000000000001, IgnitionStatus=On, GearPosition=Neutral
+19:15:48 [INFO] carpc.demo: [CarPC] #023 ClimateControl (0x600): ACStatus=0.0, FanSpeed=7.0, TargetTempDriver=22.5, TargetTempPassenger=25.5, AmbientTemp=-9.0
+19:15:48 [INFO] carpc.demo: [CarPC] #024 DMSStatus (0x400): DriverPresent=1.0, DriverAttention=Distracted, DrowsinessLevel=0.0, GazeDirection=5.0, HeadPoseYaw=-24.5, HeadPosePitch=2.0, EyeOpenness=60.0
+19:15:49 [INFO] carpc.demo: [CarPC] #025 VehicleStatus (0x100): VehicleSpeed=77.3, EngineRPM=1828.0, BatteryVoltage=12.600000000000001, IgnitionStatus=On, GearPosition=Sport
+19:15:49 [INFO] carpc.demo: [CarPC] #026 ClimateControl (0x600): ACStatus=1.0, FanSpeed=1.0, TargetTempDriver=20.0, TargetTempPassenger=27.0, AmbientTemp=-1.5
+19:15:49 [INFO] carpc.demo: [CarPC] #027 DMSStatus (0x400): DriverPresent=1.0, DriverAttention=Drowsy, DrowsinessLevel=0.0, GazeDirection=31.0, HeadPoseYaw=-18.3, HeadPosePitch=8.5, EyeOpenness=65.0
+19:15:49 [INFO] carpc.demo: [CarPC] #028 VehicleStatus (0x100): VehicleSpeed=9.1, EngineRPM=2673.0, BatteryVoltage=11.9, IgnitionStatus=On, GearPosition=Park
+19:15:49 [INFO] carpc.demo: [CarPC] #029 ClimateControl (0x600): ACStatus=1.0, FanSpeed=8.0, TargetTempDriver=21.5, TargetTempPassenger=25.0, AmbientTemp=2.0
+19:15:49 [INFO] carpc.demo: [CarPC] #030 DMSStatus (0x400): DriverPresent=1.0, DriverAttention=Drowsy, DrowsinessLevel=2.0, GazeDirection=168.0, HeadPoseYaw=16.1, HeadPosePitch=5.0, EyeOpenness=94.0
+19:15:50 [INFO] carpc.demo: [CarPC] #031 VehicleStatus (0x100): VehicleSpeed=48.7, EngineRPM=2896.0, BatteryVoltage=12.3, IgnitionStatus=On, GearPosition=Sport
+19:15:50 [INFO] carpc.demo: [CarPC] #032 ClimateControl (0x600): ACStatus=1.0, FanSpeed=4.0, TargetTempDriver=25.0, TargetTempPassenger=24.5, AmbientTemp=-9.5
+19:15:50 [INFO] carpc.demo: [CarPC] #033 DMSStatus (0x400): DriverPresent=1.0, DriverAttention=Attentive, DrowsinessLevel=2.0, GazeDirection=89.0, HeadPoseYaw=-28.3, HeadPosePitch=9.8, EyeOpenness=75.5
+19:15:50 [INFO] carpc.demo: [CarPC] #034 VehicleStatus (0x100): VehicleSpeed=51.1, EngineRPM=3352.0, BatteryVoltage=11.9, IgnitionStatus=On, GearPosition=Park
+19:15:50 [INFO] carpc.demo: [CarPC] #035 ClimateControl (0x600): ACStatus=1.0, FanSpeed=3.0, TargetTempDriver=20.0, TargetTempPassenger=26.5, AmbientTemp=0.5
+19:15:50 [INFO] carpc.demo: [CarPC] #036 DMSStatus (0x400): DriverPresent=1.0, DriverAttention=Attentive, DrowsinessLevel=2.0, GazeDirection=154.0, HeadPoseYaw=-24.8, HeadPosePitch=-7.1000000000000005, EyeOpenness=65.0
+19:15:51 [INFO] carpc.demo: [CarPC] #037 VehicleStatus (0x100): VehicleSpeed=99.9, EngineRPM=3926.0, BatteryVoltage=14.0, IgnitionStatus=On, GearPosition=Drive
+19:15:51 [INFO] carpc.demo: [CarPC] #038 ClimateControl (0x600): ACStatus=1.0, FanSpeed=1.0, TargetTempDriver=23.0, TargetTempPassenger=22.5, AmbientTemp=-6.0
+19:15:51 [INFO] carpc.demo: [CarPC] #039 DMSStatus (0x400): DriverPresent=1.0, DriverAttention=Attentive, DrowsinessLevel=2.0, GazeDirection=172.0, HeadPoseYaw=12.8, HeadPosePitch=-0.7000000000000001, EyeOpenness=95.5
+19:15:51 [INFO] carpc.demo: [CarPC] #040 VehicleStatus (0x100): VehicleSpeed=50.9, EngineRPM=3710.0, BatteryVoltage=13.700000000000001, IgnitionStatus=On, GearPosition=Drive
+19:15:51 [INFO] carpc.demo: [CarPC] #041 ClimateControl (0x600): ACStatus=0.0, FanSpeed=5.0, TargetTempDriver=23.5, TargetTempPassenger=22.0, AmbientTemp=7.0
+19:15:51 [INFO] carpc.demo: [CarPC] #042 DMSStatus (0x400): DriverPresent=1.0, DriverAttention=Drowsy, DrowsinessLevel=4.0, GazeDirection=92.0, HeadPoseYaw=-28.700000000000003, HeadPosePitch=-6.4, EyeOpenness=77.0
+19:15:52 [INFO] carpc.demo: [CarPC] #043 VehicleStatus (0x100): VehicleSpeed=77.3, EngineRPM=3395.0, BatteryVoltage=12.5, IgnitionStatus=On, GearPosition=Sport
+19:15:52 [INFO] carpc.demo: [CarPC] #044 ClimateControl (0x600): ACStatus=1.0, FanSpeed=8.0, TargetTempDriver=18.5, TargetTempPassenger=22.5, AmbientTemp=2.5
+19:15:52 [INFO] carpc.demo: [CarPC] #045 DMSStatus (0x400): DriverPresent=1.0, DriverAttention=Drowsy, DrowsinessLevel=1.0, GazeDirection=69.0, HeadPoseYaw=-27.1, HeadPosePitch=-8.9, EyeOpenness=81.0
+19:15:52 [INFO] carpc.demo: [CarPC] #046 VehicleStatus (0x100): VehicleSpeed=114.9, EngineRPM=2518.0, BatteryVoltage=13.3, IgnitionStatus=On, GearPosition=Neutral
+19:15:52 [INFO] carpc.demo: [CarPC] #047 ClimateControl (0x600): ACStatus=0.0, FanSpeed=5.0, TargetTempDriver=24.0, TargetTempPassenger=26.0, AmbientTemp=17.0
+19:15:52 [INFO] carpc.demo: [CarPC] #048 DMSStatus (0x400): DriverPresent=1.0, DriverAttention=Attentive, DrowsinessLevel=4.0, GazeDirection=116.0, HeadPoseYaw=-20.8, HeadPosePitch=-13.0, EyeOpenness=71.5
+19:15:53 [INFO] carpc.demo: [CarPC] #049 VehicleStatus (0x100): VehicleSpeed=16.1, EngineRPM=2211.0, BatteryVoltage=12.0, IgnitionStatus=On, GearPosition=Sport
+19:15:53 [INFO] carpc.demo: [CarPC] #050 ClimateControl (0x600): ACStatus=0.0, FanSpeed=5.0, TargetTempDriver=23.0, TargetTempPassenger=24.5, AmbientTemp=19.5
+19:15:53 [INFO] carpc.demo: [CarPC] #051 DMSStatus (0x400): DriverPresent=1.0, DriverAttention=Distracted, DrowsinessLevel=5.0, GazeDirection=152.0, HeadPoseYaw=-29.5, HeadPosePitch=-13.5, EyeOpenness=75.0
+19:15:53 [INFO] carpc.demo: [CarPC] #052 VehicleStatus (0x100): VehicleSpeed=104.7, EngineRPM=3093.0, BatteryVoltage=12.0, IgnitionStatus=On, GearPosition=Sport
+19:15:53 [INFO] carpc.demo: [CarPC] #053 ClimateControl (0x600): ACStatus=1.0, FanSpeed=2.0, TargetTempDriver=18.0, TargetTempPassenger=27.5, AmbientTemp=-3.0
+19:15:53 [INFO] carpc.demo: [CarPC] #054 DMSStatus (0x400): DriverPresent=1.0, DriverAttention=Attentive, DrowsinessLevel=5.0, GazeDirection=117.0, HeadPoseYaw=-16.7, HeadPosePitch=13.4, EyeOpenness=95.5
+19:15:54 [INFO] carpc.demo: [CarPC] #055 VehicleStatus (0x100): VehicleSpeed=75.0, EngineRPM=3041.0, BatteryVoltage=13.5, IgnitionStatus=On, GearPosition=Park
+19:15:54 [INFO] carpc.demo: [CarPC] #056 ClimateControl (0x600): ACStatus=0.0, FanSpeed=7.0, TargetTempDriver=27.5, TargetTempPassenger=20.0, AmbientTemp=11.0
+19:15:54 [INFO] carpc.demo: [CarPC] #057 DMSStatus (0x400): DriverPresent=1.0, DriverAttention=Attentive, DrowsinessLevel=3.0, GazeDirection=118.0, HeadPoseYaw=2.6, HeadPosePitch=-12.100000000000001, EyeOpenness=75.0
+19:15:54 [INFO] carpc.demo: [CarPC] #058 VehicleStatus (0x100): VehicleSpeed=83.60000000000001, EngineRPM=2818.0, BatteryVoltage=12.0, IgnitionStatus=On, GearPosition=Park
+19:15:54 [INFO] carpc.demo: [CarPC] #059 ClimateControl (0x600): ACStatus=0.0, FanSpeed=4.0, TargetTempDriver=19.0, TargetTempPassenger=27.0, AmbientTemp=-3.0
+19:15:54 [INFO] carpc.demo: [CarPC] #060 DMSStatus (0x400): DriverPresent=1.0, DriverAttention=Drowsy, DrowsinessLevel=5.0, GazeDirection=68.0, HeadPoseYaw=27.400000000000002, HeadPosePitch=1.2000000000000002, EyeOpenness=64.0
+19:15:55 [INFO] carpc.demo: [ECU] Sent 20 cycles. Stopping.
+19:15:55 [INFO] carpc.demo: =================================================================
+19:15:55 [INFO] carpc.demo:   Total frames received & decoded : 60
+19:15:55 [INFO] carpc.demo:   Latest signal values:
+19:15:55 [INFO] carpc.demo:     VehicleSpeed                       : 83.60000000000001
+19:15:55 [INFO] carpc.demo:     EngineRPM                          : 2818.0
+19:15:55 [INFO] carpc.demo:     BatteryVoltage                     : 12.0
+19:15:55 [INFO] carpc.demo:     IgnitionStatus                     : On
+19:15:55 [INFO] carpc.demo:     GearPosition                       : Park
+19:15:55 [INFO] carpc.demo:     ACStatus                           : 0.0
+19:15:55 [INFO] carpc.demo:     FanSpeed                           : 4.0
+19:15:55 [INFO] carpc.demo:     TargetTempDriver                   : 19.0
+19:15:55 [INFO] carpc.demo:     TargetTempPassenger                : 27.0
+19:15:55 [INFO] carpc.demo:     AmbientTemp                        : -3.0
+19:15:55 [INFO] carpc.demo:     DriverPresent                      : 1.0
+19:15:55 [INFO] carpc.demo:     DriverAttention                    : Drowsy
+19:15:55 [INFO] carpc.demo:     DrowsinessLevel                    : 5.0
+19:15:55 [INFO] carpc.demo:     GazeDirection                      : 68.0
+19:15:55 [INFO] carpc.demo:     HeadPoseYaw                        : 27.400000000000002
+19:15:55 [INFO] carpc.demo:     HeadPosePitch                      : 1.2000000000000002
+19:15:55 [INFO] carpc.demo:     EyeOpenness                        : 64.0
+19:15:55 [INFO] carpc.demo:   JSON log : E:\Project\carPC_March2026\localGit\prvCarPC\democode\can_frames.jsonl
+19:15:55 [INFO] carpc.demo: =================================================================
